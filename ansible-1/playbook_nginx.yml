@@ -3,10 +3,10 @@
   hosts: webserver
   become_user: root
   tasks:
-    - name: Install Nginx
-      apt:
-        name: nginx-extras
-        update_cache: yes
+#    - name: Install Nginx
+#      apt:
+#        name: nginx-extras
+#        update_cache: yes
 
     - name: Copy the nginx.conf
       copy:
@@ -18,8 +18,8 @@
         backup: yes
       register: restart_nginx
 
-    - name: Copy the html file
-      template: src=devops.html.j2 dest=/var/www/html/devops.html
+    - name: Copy the index.html
+      template: src=index.nginx-debian.html.j2 dest=/var/www/html/index.nginx-debian.html
 
     - name: Start nginx service
       systemd:
@@ -41,5 +41,4 @@
 #    - name: Restart nginx
 #      systemd:
 #        daemon_reload: true
-#        name: nginx
-#        state: restarted
+#        name: 
