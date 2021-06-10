@@ -1,0 +1,45 @@
+---
+- name: Enable nginx service
+  hosts: webserver
+  become_user: root
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx-extras
+        update_cache: yes
+
+    - name: Copy the nginx.conf
+      copy:
+        src: nginx.conf
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+        backup: yes
+      register: restart_nginx
+
+    - name: Copy the html file
+      template: src=devops.html.j2 dest=/var/www/html/devops.html
+
+    - name: Start nginx service
+      systemd:
+        name: nginx
+        state: started
+      register: result
+
+  #    - name: Print result
+#      debug:
+#        msg: "{{ result['state'] }}"
+
+#    - name: Stop nginx service
+#      systemd:
+#        name: nginx
+#        state: stopped
+#      when: result['state']=='started'
+
+#  handlers:
+#    - name: Restart nginx
+#      systemd:
+#        daemon_reload: true
+#        name: nginx
+#        state: restarted
