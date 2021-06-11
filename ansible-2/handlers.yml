@@ -1,0 +1,30 @@
+---
+- name: restart nginx
+  debug:
+    msg: checking config first
+  changed_when: true
+  notify:
+    - check nginx configuration
+    - restart nginx - after config check
+
+
+- name: check nginx configuration
+  command: nginx -t
+  register: nginx_test_result
+  changed_when: nginx_test_result.rc != 0
+
+
+- name: restart nginx - after config check
+  systemd:
+    daemon_reload: true
+    name: nginx
+    state: restarted
+  register: restart_nginx_result
+  ignore_errors: true
+  notify: check status nginx
+
+
+- name: check status nginx
+  fail:
+    msg: "Starting nginx failed"
+  when: restart_nginx_result.failed

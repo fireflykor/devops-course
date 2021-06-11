@@ -1,0 +1,32 @@
+---
+- name: Enable nginx service
+  hosts: webserver
+  become_user: root
+  tasks:
+#    - name: Install Nginx
+#      apt:
+#        name: nginx-extras
+#        update_cache: yes
+
+    - name: Start nginx service
+      systemd:
+        name: nginx
+        state: started
+      register: result
+
+    - name: Copy the nginx config
+      copy:
+        src: nginx.conf
+        dest: /etc/nginx/sites-enabled/nginx.conf
+        mode: '0644'
+      register: restart_nginx
+      notify: restart nginx
+
+    - name: Copy the index.html
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        mode: '0644'
+
+  handlers:
+    - include: handlers.yml
