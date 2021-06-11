@@ -12,3 +12,16 @@ $ ./weather_script.sh Perm
 Temperature: 19 C
 Humidity: 73 %
 ```
+
+## Nginx
+Ansible сценарий, который: 
+- Устанавливает Nginx на группу web серверов
+- Активирует Nginx
+- Копирует локальный конфиг
+- Копирует новый index.html
+
+В результате выполнения доступна следующая страница по адресу http://ip_host/
+
+
+![image](https://user-images.githubusercontent.com/47751026/121514522-8df19880-ca05-11eb-897f-32591ac481b1.png)
+
