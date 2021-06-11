@@ -3,10 +3,10 @@
   hosts: webserver
   become_user: root
   tasks:
-#    - name: Install Nginx
-#      apt:
-#        name: nginx-extras
-#        update_cache: yes
+    - name: Install Nginx
+      apt:
+        name: nginx-extras
+        update_cache: yes
 
     - name: Start nginx service
       systemd:

@@ -3,23 +3,10 @@
   hosts: webserver
   become_user: root
   tasks:
-#    - name: Install Nginx
-#      apt:
-#        name: nginx-extras
-#        update_cache: yes
-
-    - name: Copy the nginx.conf
-      copy:
-        src: nginx.conf
-        dest: /etc/nginx/nginx.conf
-        owner: root
-        group: root
-        mode: '0644'
-        backup: yes
-      register: restart_nginx
-
-    - name: Copy the index.html
-      template: src=index.nginx-debian.html.j2 dest=/var/www/html/index.nginx-debian.html
+    - name: Install Nginx
+      apt:
+        name: nginx-extras
+        update_cache: yes
 
     - name: Start nginx service
       systemd:
@@ -27,18 +14,15 @@
         state: started
       register: result
 
-  #    - name: Print result
-#      debug:
-#        msg: "{{ result['state'] }}"
+    - name: Copy the nginx config
+      copy:
+        src: nginx.conf
+        dest: /etc/nginx/sites-enabled/nginx.conf
+        mode: '0644'
+      register: restart_nginx
 
-#    - name: Stop nginx service
-#      systemd:
-#        name: nginx
-#        state: stopped
-#      when: result['state']=='started'
-
-#  handlers:
-#    - name: Restart nginx
-#      systemd:
-#        daemon_reload: true
-#        name: 
+    - name: Copy the index.html
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        mode: '0644'
