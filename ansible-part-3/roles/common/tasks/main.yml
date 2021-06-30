@@ -8,6 +8,8 @@
     - htop
     - mc
     - net-tools
+    - libpq-dev
+    - python-dev
   when: ansible_os_family == 'Debian'
 
 - name: Install default packages to RedHat systems
@@ -19,4 +21,11 @@
     - htop
     - mc
     - net-tools
+    - python-dev
+    - libpq-dev
   when: ansible_os_family == 'RedHat'
+
+- name: "Install Python packages"
+  pip: "name={{ item }}  state=present"
+  with_items:
+    - psycopg2-binary

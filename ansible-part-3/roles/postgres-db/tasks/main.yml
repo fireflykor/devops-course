@@ -24,3 +24,13 @@
      dest: "/etc/postgresql/{{ postgres_version }}/postgresql.conf"
      owner: postgres
      mode: 0644
+
+
+- name: Connect to test database and remove an existing user's password
+  postgresql_user:
+    user: "{{postgres_user}}"
+    password: "{{postgres_pass}}"
+    encrypted: yes
+  become: true
+  become_user: "{{postgres_user}}"
+  notify:  restart postgres
